@@ -10,9 +10,8 @@ from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 
-# =====================================================
 # CONFIG
-# =====================================================
+
 
 CSV_FILE = "accelerometer_xyz.csv"
 MAX_POINTS = 200
@@ -32,18 +31,18 @@ x_received = False
 y_received = False
 z_received = False
 
-# =====================================================
+
 # CSV
-# =====================================================
+
 
 if not os.path.exists(CSV_FILE):
     with open(CSV_FILE, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["timestamp", "x", "y", "z"])
 
-# =====================================================
+
 # Wrapper function (Q2)
-# =====================================================
+
 
 def add_sample(x, y, z):
     """
@@ -60,9 +59,8 @@ def add_sample(x, y, z):
     y_buffer.append(y)
     z_buffer.append(z)
 
-# =====================================================
 # Save data
-# =====================================================
+
 
 def save_combined_data():
 
@@ -89,9 +87,9 @@ def save_combined_data():
         y_received = False
         z_received = False
 
-# =====================================================
+
 # Cloud callbacks
-# =====================================================
+
 
 def on_x(client, value):
     global x_value, x_received
@@ -111,9 +109,8 @@ def on_z(client, value):
     z_received = True
     save_combined_data()
 
-# =====================================================
 # Arduino Cloud
-# =====================================================
+
 
 client = ArduinoCloudClient(
     device_id=DEVICE_ID,
@@ -139,9 +136,9 @@ client.register(
     on_write=on_z
 )
 
-# =====================================================
+
 # Dash App
-# =====================================================
+
 
 app = Dash(__name__)
 
@@ -212,9 +209,9 @@ def update_graph(_):
 
     return fig
 
-# =====================================================
+
 # Run both simultaneously
-# =====================================================
+
 
 def start_cloud():
     print("Connecting to Arduino IoT Cloud...")
